@@ -50,4 +50,23 @@ defmodule Exsm.Transitions do
 
     response
   end
+
+  @doc false
+  def valid_transition?(struct, state_machine_module, next_state) do
+    initial_state = state_machine_module._exsm_initial_state()
+    transitions = state_machine_module._exsm_transitions()
+    state_field = state_machine_module._field()
+
+    # Getting current state of the struct or falling back to the
+    # first declared state on the struct model.
+    current_state =
+      case Map.get(struct, state_field) do
+        nil -> initial_state
+        current_state -> current_state
+      end
+
+    # Checking declared transitions and guard functions before
+    # actually updating the struct and retuning the tuple.
+    Transition.declared_transition?(transitions, current_state, next_state)
+  end
 end
