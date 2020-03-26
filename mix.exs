@@ -26,4 +26,16 @@ defmodule Exsm.MixProject do
       {:ecto, "~> 3.4", only: :test}
     ]
   end
+
+  defp description() do
+    "Exsm is a State Machine library for structs."
+  end
+
+  defp package() do
+    [
+      maintainers: ["Saksham Gupta"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => "https://github.com/sakshamgupta05/exsm"}
+    ]
+  end
 end
