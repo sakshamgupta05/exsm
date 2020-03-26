@@ -1,6 +1,6 @@
 defmodule ExsmTest do
   use ExUnit.Case, async: false
-  doctest Exsm
+  # doctest Exsm
 
   alias ExsmTest.Helper
   alias ExsmTest.TestDefaultFieldStruct
@@ -26,17 +26,27 @@ defmodule ExsmTest do
     stateless_struct = %TestStruct{}
     completed_struct = %TestStruct{my_state: "completed"}
 
+    assert Exsm.valid_transition?(created_struct, TestStateMachine, "partial")
+
     assert {:ok, %TestStruct{my_state: "partial"}} =
              Exsm.transition_to(created_struct, TestStateMachine, "partial")
+
+    assert Exsm.valid_transition?(created_struct, TestStateMachine, "completed")
 
     assert {:ok, %TestStruct{my_state: "completed", missing_fields: false}} =
              Exsm.transition_to(created_struct, TestStateMachine, "completed")
 
+    assert Exsm.valid_transition?(partial_struct, TestStateMachine, "completed")
+
     assert {:ok, %TestStruct{my_state: "completed", missing_fields: false}} =
              Exsm.transition_to(partial_struct, TestStateMachine, "completed")
 
+    refute Exsm.valid_transition?(stateless_struct, TestStateMachine, "created")
+
     assert {:error, "Transition to this state isn't declared."} =
              Exsm.transition_to(stateless_struct, TestStateMachine, "created")
+
+    refute Exsm.valid_transition?(completed_struct, TestStateMachine, "created")
 
     assert {:error, "Transition to this state isn't declared."} =
              Exsm.transition_to(completed_struct, TestStateMachine, "created")
@@ -47,11 +57,17 @@ defmodule ExsmTest do
     partial_struct = %TestStruct{my_state: "partial", missing_fields: false}
     completed_struct = %TestStruct{my_state: "completed"}
 
+    assert Exsm.valid_transition?(created_struct, TestStateMachine, "canceled")
+
     assert {:ok, %TestStruct{my_state: "canceled", missing_fields: false}} =
              Exsm.transition_to(created_struct, TestStateMachine, "canceled")
 
+    assert Exsm.valid_transition?(partial_struct, TestStateMachine, "canceled")
+
     assert {:ok, %TestStruct{my_state: "canceled", missing_fields: false}} =
              Exsm.transition_to(partial_struct, TestStateMachine, "canceled")
+
+    assert Exsm.valid_transition?(completed_struct, TestStateMachine, "canceled")
 
     assert {:ok, %TestStruct{my_state: "canceled"}} =
              Exsm.transition_to(completed_struct, TestStateMachine, "canceled")

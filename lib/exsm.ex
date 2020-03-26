@@ -78,7 +78,7 @@ defmodule Exsm do
 
   ## Examples
 
-      Exsm.transition_to(%User{state: :partial}, UserStateMachine, :completed)
+      iex> Exsm.transition_to(%User{state: :partial}, UserStateMachine, :completed)
       {:ok, %User{state: :completed}}
   """
   @spec transition_to(struct, module, String.t()) :: {:ok, struct} | {:error, String.t()}
@@ -92,6 +92,29 @@ defmodule Exsm do
     :exit, error_tuple ->
       exception = deep_first_of_tuple(error_tuple)
       raise exception
+  end
+
+  @doc """
+  Returns true if transition is valid.
+
+  ## Parameters
+
+    - `struct`: The `struct` you want to transit to another state.
+    - `state_machine_module`: The module that holds the state machine logic, where Exsm as imported.
+    - `next_state`: String of the next state you want to transition to.
+
+  ## Examples
+
+      iex> Exsm.valid_transition?(%User{state: :partial}, UserStateMachine, :completed)
+      true
+  """
+  @spec valid_transition?(struct, module, String.t()) :: true | false
+  def valid_transition?(struct, state_machine_module, next_state) do
+    Exsm.Transitions.valid_transition?(
+      struct,
+      state_machine_module,
+      next_state
+    )
   end
 
   defp deep_first_of_tuple(tuple) when is_tuple(tuple) do
