@@ -7,7 +7,15 @@ defmodule Exsm.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package(),
+      source_url: "https://github.com/sakshamgupta05/exsm",
+      docs: [
+        main: "Exsm",
+        extras: ["README.md"]
+      ],
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
