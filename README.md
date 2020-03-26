@@ -1,5 +1,7 @@
 # Exsm
 
+[![Coverage Status](https://coveralls.io/repos/github/sakshamgupta05/exsm/badge.svg?branch=master)](https://coveralls.io/github/sakshamgupta05/exsm?branch=master)
+
 **TODO: Add description**
 
 ## Installation
