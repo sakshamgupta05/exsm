@@ -21,7 +21,9 @@ defmodule Exsm.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.21.3", only: :dev}
+      {:ex_doc, "~> 0.21", only: :dev},
+      {:excoveralls, "~> 0.12", only: :test},
+      {:ecto, "~> 3.4", only: :test}
     ]
   end
 end
