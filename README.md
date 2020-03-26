@@ -1,5 +1,6 @@
 # Exsm
 
+[![Build Status](https://travis-ci.org/sakshamgupta05/exsm.svg?branch=master)](https://travis-ci.org/sakshamgupta05/exsm)
 [![Coverage Status](https://coveralls.io/repos/github/sakshamgupta05/exsm/badge.svg?branch=master)](https://coveralls.io/github/sakshamgupta05/exsm?branch=master)
 
 **TODO: Add description**
@@ -12,7 +13,7 @@ by adding `exsm` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exsm, "~> 0.1.0"}
+    {:exsm, "~> 0.1"}
   ]
 end
 ```
