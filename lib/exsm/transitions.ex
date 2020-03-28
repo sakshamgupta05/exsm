@@ -17,32 +17,30 @@ defmodule Exsm.Transitions do
 
     # Getting current state of the struct or falling back to the
     # first declared state on the struct model.
-    current_state =
+    prev_state =
       case Map.get(struct, state_field) do
         nil -> initial_state
-        current_state -> current_state
+        prev_state -> prev_state
       end
 
     # Checking declared transitions and guard functions before
     # actually updating the struct and retuning the tuple.
-    declared_transition? = Transition.declared_transition?(transitions, current_state, next_state)
+    declared_transition? = Transition.declared_transition?(transitions, prev_state, next_state)
 
     response =
       if declared_transition? do
-        guarded_transition? =
-          Transition.guarded_transition?(state_machine_module, struct, next_state)
+        case Transition.before_callbacks(struct, prev_state, next_state, state_machine_module) do
+          {:ok, struct} ->
+            struct =
+              struct
+              |> Transition.persist_struct(prev_state, next_state, state_machine_module)
+              |> Transition.log_transition(prev_state, next_state, state_machine_module)
+              |> Transition.after_callbacks(prev_state, next_state, state_machine_module)
 
-        if guarded_transition? do
-          guarded_transition?
-        else
-          struct =
-            struct
-            |> Transition.before_callbacks(next_state, state_machine_module)
-            |> Transition.persist_struct(next_state, state_machine_module)
-            |> Transition.log_transition(next_state, state_machine_module)
-            |> Transition.after_callbacks(next_state, state_machine_module)
+            {:ok, struct}
 
-          {:ok, struct}
+          {:error, reason} ->
+            {:error, reason}
         end
       else
         {:error, @not_declated_error}
@@ -59,14 +57,14 @@ defmodule Exsm.Transitions do
 
     # Getting current state of the struct or falling back to the
     # first declared state on the struct model.
-    current_state =
+    prev_state =
       case Map.get(struct, state_field) do
         nil -> initial_state
-        current_state -> current_state
+        prev_state -> prev_state
       end
 
     # Checking declared transitions and guard functions before
     # actually updating the struct and retuning the tuple.
-    Transition.declared_transition?(transitions, current_state, next_state)
+    Transition.declared_transition?(transitions, prev_state, next_state)
   end
 end

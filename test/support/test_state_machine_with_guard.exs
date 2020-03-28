@@ -7,7 +7,7 @@ defmodule ExsmTest.TestStateMachineWithGuard do
       "partial" => "completed"
     }
 
-  def guard_transition(struct, "completed") do
+  def before_transition(struct, _prev_state, "completed") do
     # Code to simulate and force an exception inside a
     # guard function.
     if Map.get(struct, :force_exception) do
@@ -16,12 +16,14 @@ defmodule ExsmTest.TestStateMachineWithGuard do
 
     no_missing_fields = Map.get(struct, :missing_fields) == false
 
-    unless no_missing_fields do
+    if no_missing_fields do
+      {:ok, struct}
+    else
       {:error, "Guard Condition Custom Cause"}
     end
   end
 
-  def log_transition(struct, _next_state) do
+  def log_transition(struct, _prev_state, _next_state) do
     # Log transition here
     if Map.get(struct, :force_exception) do
       Exsm.non_existing_function_should_raise_error()

@@ -4,7 +4,7 @@ defmodule Exsm.MixProject do
   def project do
     [
       app: :exsm,
-      version: "0.1.1",
+      version: "0.2.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -29,9 +29,10 @@ defmodule Exsm.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.21", only: :dev},
-      {:excoveralls, "~> 0.12", only: :test},
-      {:ecto, "~> 3.4", only: :test}
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.12", only: :test, runtime: false},
+      {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
+      {:ecto, "~> 3.4", only: :test, runtime: false}
     ]
   end
 
