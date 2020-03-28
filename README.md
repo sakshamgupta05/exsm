@@ -13,7 +13,7 @@ by adding `exsm` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exsm, "~> 0.1"}
+    {:exsm, "~> 0.2"}
   ]
 end
 ```
