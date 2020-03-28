@@ -9,8 +9,6 @@ Code.load_file("test/support/test_state_machine_default_field.exs")
 Code.load_file("test/support/test_repo.exs")
 
 defmodule ExsmTest.Helper do
-  import ExUnit.CaptureLog
-
   alias ExsmTest.TestRepo
   alias ExsmTest.TestStateMachine
   alias ExsmTest.TestStruct

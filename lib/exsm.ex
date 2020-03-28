@@ -88,10 +88,6 @@ defmodule Exsm do
       state_machine_module,
       next_state
     )
-  catch
-    :exit, error_tuple ->
-      exception = deep_first_of_tuple(error_tuple)
-      raise exception
   end
 
   @doc """
@@ -116,12 +112,4 @@ defmodule Exsm do
       next_state
     )
   end
-
-  defp deep_first_of_tuple(tuple) when is_tuple(tuple) do
-    tuple
-    |> elem(0)
-    |> deep_first_of_tuple
-  end
-
-  defp deep_first_of_tuple(value), do: value
 end
