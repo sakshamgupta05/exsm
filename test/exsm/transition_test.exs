@@ -67,6 +67,22 @@ defmodule ExsmTest.TransitionTest do
     assert Transition.declared_transition?(transitions, "e", "d")
   end
 
+  test "declared_transition?/3 for a declared transition that allows transition for any state - list" do
+    states = ["a", "b", "c", "d", "e", "f"]
+
+    transitions =
+      %{
+        ["a", "b"] => ["c", "d", "e"]
+      }
+      |> Transitions.parse_transitions(states)
+
+    assert Transition.declared_transition?(transitions, "a", "c")
+    assert Transition.declared_transition?(transitions, "a", "e")
+    assert Transition.declared_transition?(transitions, "b", "d")
+    refute Transition.declared_transition?(transitions, "a", "f")
+    refute Transition.declared_transition?(transitions, "e", "f")
+  end
+
   test "invalid transitions - state not declared" do
     states = ["a", "b", "c"]
 
