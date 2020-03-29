@@ -95,9 +95,11 @@ defmodule Exsm.Transition do
 
   defp matches_transition?(transitions, prev_state, next_state) do
     case Map.fetch(transitions, prev_state) do
-      {:ok, [_ | _] = declared_states} -> Enum.member?(declared_states, next_state)
-      {:ok, declared_state} -> declared_state == next_state
-      :error -> false
+      {:ok, declared_states} when is_list(declared_states) ->
+        Enum.member?(declared_states, next_state)
+
+      :error ->
+        false
     end
   end
 

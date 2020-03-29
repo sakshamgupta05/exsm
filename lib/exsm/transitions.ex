@@ -67,4 +67,41 @@ defmodule Exsm.Transitions do
     # actually updating the struct and retuning the tuple.
     Transition.declared_transition?(transitions, prev_state, next_state)
   end
+
+  def parse_transitions(transitions) do
+    Map.keys(transitions)
+    |> Enum.reduce(%{}, &reduce_transitions(transitions, &1, &2))
+  end
+
+  defp reduce_transitions(transitions, key, acc) do
+    cond do
+      is_binary(key) ->
+        Map.put(acc, key, append_value(Map.get(acc, key, []), key, transitions[key]))
+
+      is_list(key) ->
+        Enum.reduce(key, acc, fn k, a ->
+          Map.put(a, key, append_value(Map.get(a, k, []), k, transitions[k]))
+        end)
+
+      true ->
+        raise "Invalid transitions defined"
+    end
+  end
+
+  defp append_value(prev_value, key, value) do
+    value =
+      cond do
+        is_binary(value) -> [value]
+        is_list(value) -> value
+        true -> raise "Invalid transitions defined"
+      end
+
+    Enum.reduce(value, prev_value, fn v, a ->
+      if v in a do
+        a
+      else
+        [v | a]
+      end
+    end)
+  end
 end
