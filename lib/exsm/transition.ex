@@ -12,10 +12,12 @@ defmodule Exsm.Transition do
   """
   @spec declared_transition?(list, atom, atom) :: boolean
   def declared_transition?(transitions, prev_state, next_state) do
-    if matches_wildcard?(transitions, next_state) do
-      true
-    else
-      matches_transition?(transitions, prev_state, next_state)
+    case Map.fetch(transitions, prev_state) do
+      {:ok, declared_states} when is_list(declared_states) ->
+        Enum.member?(declared_states, next_state)
+
+      :error ->
+        false
     end
   end
 
@@ -87,20 +89,6 @@ defmodule Exsm.Transition do
       next_state,
       module._field()
     )
-  end
-
-  defp matches_wildcard?(transitions, next_state) do
-    matches_transition?(transitions, "*", next_state)
-  end
-
-  defp matches_transition?(transitions, prev_state, next_state) do
-    case Map.fetch(transitions, prev_state) do
-      {:ok, declared_states} when is_list(declared_states) ->
-        Enum.member?(declared_states, next_state)
-
-      :error ->
-        false
-    end
   end
 
   # Private function that receives a function, a callback,

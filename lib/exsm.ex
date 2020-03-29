@@ -61,7 +61,7 @@ defmodule Exsm do
       def _exsm_states(), do: unquote(states)
 
       def _exsm_transitions() do
-        unquote(Macro.escape(transitions)) |> Exsm.Transitions.parse_transitions()
+        unquote(Macro.escape(transitions)) |> Exsm.Transitions.parse_transitions(unquote(states))
       end
 
       def _field(), do: unquote(field)
