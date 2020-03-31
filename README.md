@@ -1,7 +1,9 @@
 # Exsm
 
 [![Build Status](https://travis-ci.org/sakshamgupta05/exsm.svg?branch=master)](https://travis-ci.org/sakshamgupta05/exsm)
-[![Coverage Status](https://coveralls.io/repos/github/sakshamgupta05/exsm/badge.svg?branch=master)](https://coveralls.io/github/sakshamgupta05/exsm?branch=master)
+[![codecov](https://codecov.io/gh/sakshamgupta05/exsm/branch/master/graph/badge.svg?token=)](https://codecov.io/gh/sakshamgupta05/exsm)
+[![hex.pm version](https://img.shields.io/hexpm/v/exsm.svg)](https://hex.pm/packages/exsm)
+[![hex.pm downloads](https://img.shields.io/hexpm/dt/exsm.svg)](https://hex.pm/packages/exsm)
 
 Exsm is a thin State Machine library for Elixir that integrates with
 Phoenix out of the box.
