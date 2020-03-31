@@ -79,13 +79,13 @@ defmodule ExsmTest do
     assert {:error, _cause} = Exsm.transition_to(struct, TestStateMachineWithGuard, "canceled")
   end
 
-  test "Guard functions should be executed before moving the resource to the next state" do
+  test "Before callback should be executed before moving the resource to the next state" do
     struct = %TestStruct{my_state: "created", missing_fields: true}
 
     assert {:error, _cause} = Exsm.transition_to(struct, TestStateMachineWithGuard, "completed")
   end
 
-  test "Guard functions should allow or block transitions" do
+  test "Before callback should allow or block transitions" do
     allowed_struct = %TestStruct{my_state: "created", missing_fields: false}
     blocked_struct = %TestStruct{my_state: "created", missing_fields: true}
 
@@ -96,7 +96,7 @@ defmodule ExsmTest do
              Exsm.transition_to(blocked_struct, TestStateMachineWithGuard, "completed")
   end
 
-  test "Guard functions should return an error cause" do
+  test "Before callback should return an error cause" do
     blocked_struct = %TestStruct{my_state: "created", missing_fields: true}
 
     assert {:error, "Guard Condition Custom Cause"} =
@@ -110,7 +110,7 @@ defmodule ExsmTest do
              Exsm.transition_to(stateless_struct, TestStateMachine, "partial")
   end
 
-  test "Modules without guard conditions should allow transitions by default" do
+  test "Modules without before callbacks should allow transitions by default" do
     struct = %TestStruct{my_state: "created"}
 
     assert {:ok, %TestStruct{my_state: "completed"}} =
@@ -118,7 +118,7 @@ defmodule ExsmTest do
   end
 
   @tag :capture_log
-  test "Implict rescue on the guard clause internals should raise any other excepetion not strictly related to missing guard_tranistion/2 existence" do
+  test "Implict rescue on the before callback internals should raise any other excepetion not strictly related to missing before_transition/3 existence" do
     wrong_struct = %TestStruct{my_state: "created", force_exception: true}
 
     assert_raise UndefinedFunctionError, fn ->
@@ -126,7 +126,7 @@ defmodule ExsmTest do
     end
   end
 
-  test "after_transition/2 and before_transition/2 callbacks should be automatically executed" do
+  test "after_transition/3 and before_transition/3 callbacks should be automatically executed" do
     struct = %TestStruct{}
     assert struct.missing_fields == nil
 
@@ -138,7 +138,7 @@ defmodule ExsmTest do
   end
 
   @tag :capture_log
-  test "Implict rescue on the callbacks internals should raise any other excepetion not strictly related to missing callbacks_fallback/2 existence" do
+  test "Implict rescue on the callbacks internals should raise any other excepetion not strictly related to missing fallback existence" do
     wrong_struct = %TestStruct{my_state: "created", force_exception: true}
 
     assert_raise UndefinedFunctionError, fn ->
