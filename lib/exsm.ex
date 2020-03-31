@@ -59,7 +59,11 @@ defmodule Exsm do
       # Functions to hold and expose internal info of the states.
       def _exsm_initial_state(), do: List.first(unquote(states))
       def _exsm_states(), do: unquote(states)
-      def _exsm_transitions(), do: unquote(Macro.escape(transitions))
+
+      def _exsm_transitions() do
+        unquote(Macro.escape(transitions)) |> Exsm.Transitions.parse_transitions(unquote(states))
+      end
+
       def _field(), do: unquote(field)
     end
   end

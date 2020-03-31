@@ -154,6 +154,14 @@ defmodule ExsmTest do
     end
   end
 
+  test "After transition function should still raise errors if not related to the existence of after_transition/1 method" do
+    wrong_struct = %{state: "created", force_exception: true}
+
+    assert_raise UndefinedFunctionError, fn ->
+      Exsm.transition_to(wrong_struct, TestStateMachineDefaultField, "canceled")
+    end
+  end
+
   @tag :capture_log
   test "Transition log function should still raise errors if not related to the existence of persist/1 method" do
     wrong_struct = %TestStruct{my_state: "created", force_exception: true}
