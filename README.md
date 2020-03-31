@@ -17,6 +17,7 @@ Don't forget to check the [Exsm Docs](https://hexdocs.pm/exsm)
   - [Supported Declaration Types](#supported-declaration-types)
   - [Wildcards](#wildcards)
 - [Changing States](#changing-states)
+- [Validate Transition](#validate-transition)
 - [Callbacks](#callbacks)
   - [Before Callback](#before-callback)
   - [Persist State](#persist-state)
@@ -165,6 +166,30 @@ Exsm.transition_to(your_struct, YourStateMachine, "next_state")
 ```elixir
 user = Accounts.get_user!(1)
 Exsm.transition_to(user, UserStateMachine, "complete")
+```
+
+## Validate Transition
+
+If you want to check if a transition is valid without actually performing
+the transition, you can do so using `Exsm.valid_transition?/3`
+
+### `Exsm.valid_transition?/3`
+It takes three arguments:
+
+- `struct`: The `struct` you want to transit to another state.
+- `state_machine_module`: The module that holds the state machine logic, where Exsm as imported.
+- `next_event`: `string` of the next state you want the struct to transition to.
+
+```elixir
+Exsm.valid_transition?(your_struct, YourStateMachine, "next_state")
+# true/false
+```
+
+### Example:
+
+```elixir
+user = Accounts.get_user!(1)
+Exsm.valid_transition?(user, UserStateMachine, "complete")
 ```
 
 ## Callbacks
