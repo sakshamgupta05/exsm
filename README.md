@@ -231,7 +231,7 @@ defmodule YourProject.UserStateMachine do
     transitions: %{"created" => "complete"}
 
   # Before callback for transition "created" to "complete"
-  def before_callback(struct, "created", "complete") do
+  def before_transition(struct, "created", "complete") do
     if Map.get(struct, :missing_fields) == true do
       {:error, "There are missing fields"}
     else
