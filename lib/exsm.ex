@@ -69,6 +69,18 @@ defmodule Exsm do
   end
 
   @doc """
+  Start function that will trigger a supervisor for the Machinery.Transitions, a
+  GenServer that controls the state transitions.
+  """
+  def start(_type, _args) do
+    if Application.get_env(:exsm, :genserver, false) do
+      children = [{Machinery.TransitionsGen, name: Machinery.TransitionsGen}]
+      opts = [strategy: :one_for_one, name: Machinery.Supervisor]
+      Supervisor.start_link(children, opts)
+    end
+  end
+
+  @doc """
   Triggers the transition of a struct to a new state, accordinly to a specific
   state machine module, if it passes any existing guard functions.
   It also runs any before or after callbacks and returns a tuple with
@@ -87,11 +99,28 @@ defmodule Exsm do
   """
   @spec transition_to(struct, module, String.t()) :: {:ok, struct} | {:error, String.t()}
   def transition_to(struct, state_machine_module, next_state) do
-    Exsm.Transitions.transition_to(
-      struct,
-      state_machine_module,
-      next_state
-    )
+    if Application.get_env(:exsm, :genserver, false) do
+      GenServer.call(
+        Machinery.TransitionsGen,
+        {
+          :run,
+          struct,
+          state_machine_module,
+          next_state
+        },
+        :infinity
+      )
+    else
+      Exsm.Transitions.transition_to(
+        struct,
+        state_machine_module,
+        next_state
+      )
+    end
+  catch
+    :exit, error_tuple ->
+      exception = deep_first_of_tuple(error_tuple)
+      raise exception
   end
 
   @doc """
@@ -116,4 +145,12 @@ defmodule Exsm do
       next_state
     )
   end
+
+  defp deep_first_of_tuple(tuple) when is_tuple(tuple) do
+    tuple
+    |> elem(0)
+    |> deep_first_of_tuple
+  end
+
+  defp deep_first_of_tuple(value), do: value
 end
