@@ -26,7 +26,7 @@ defmodule Exsm.Transition do
   fallback to a boilerplate behaviour.
   This is meant to be for internal use only.
   """
-  @spec before_callbacks(struct, atom, atom, module) :: {:ok, struct} | {:error, String.t()}
+  @spec before_callbacks(struct | map, atom, atom, module) :: {:ok, struct} | {:error, String.t()}
   def before_callbacks(struct, prev_state, next_state, module) do
     case run_or_fallback(
            &module.before_transition/3,
@@ -46,7 +46,7 @@ defmodule Exsm.Transition do
   fallback to a boilerplate behaviour.
   This is meant to be for internal use only.
   """
-  @spec after_callbacks(struct, atom, atom, module) :: struct
+  @spec after_callbacks(struct | map, atom, atom, module) :: struct
   def after_callbacks(struct, prev_state, next_state, module) do
     run_or_fallback(
       &module.after_transition/3,
@@ -63,7 +63,7 @@ defmodule Exsm.Transition do
   changing state.
   This is meant to be for internal use only.
   """
-  @spec persist_struct(struct, atom, atom, module) :: struct
+  @spec persist_struct(struct | map, atom, atom, module) :: struct
   def persist_struct(struct, prev_state, next_state, module) do
     run_or_fallback(
       &module.persist/3,
@@ -79,7 +79,7 @@ defmodule Exsm.Transition do
   Function resposible for triggering transitions persistence.
   This is meant to be for internal use only.
   """
-  @spec log_transition(struct, atom, atom, module) :: struct
+  @spec log_transition(struct | map, atom, atom, module) :: struct
   def log_transition(struct, prev_state, next_state, module) do
     run_or_fallback(
       &module.log_transition/3,

@@ -85,7 +85,7 @@ defmodule Exsm do
       iex> Exsm.transition_to(%User{state: :partial}, UserStateMachine, :completed)
       {:ok, %User{state: :completed}}
   """
-  @spec transition_to(struct, module, String.t()) :: {:ok, struct} | {:error, String.t()}
+  @spec transition_to(struct | map, module, String.t()) :: {:ok, struct} | {:error, String.t()}
   def transition_to(struct, state_machine_module, next_state) do
     Exsm.Transitions.transition_to(
       struct,
@@ -108,7 +108,7 @@ defmodule Exsm do
       iex> Exsm.valid_transition?(%User{state: :partial}, UserStateMachine, :completed)
       true
   """
-  @spec valid_transition?(struct, module, String.t()) :: true | false
+  @spec valid_transition?(struct | map, module, String.t()) :: true | false
   def valid_transition?(struct, state_machine_module, next_state) do
     Exsm.Transitions.valid_transition?(
       struct,
