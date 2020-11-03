@@ -35,7 +35,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exsm, "~> 0.3.1"}
+    {:exsm, "~> 0.3.2"}
   ]
 end
 ```
