@@ -43,12 +43,12 @@ defmodule ExsmTest do
 
     refute Exsm.valid_transition?(stateless_struct, TestStateMachine, "created")
 
-    assert {:error, "Transition to this state isn't declared."} =
+    assert {:error, "Transition from: created, to: created isn't declared."} =
              Exsm.transition_to(stateless_struct, TestStateMachine, "created")
 
     refute Exsm.valid_transition?(completed_struct, TestStateMachine, "created")
 
-    assert {:error, "Transition to this state isn't declared."} =
+    assert {:error, "Transition from: completed, to: created isn't declared."} =
              Exsm.transition_to(completed_struct, TestStateMachine, "created")
   end
 

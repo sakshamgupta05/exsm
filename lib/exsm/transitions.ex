@@ -7,7 +7,6 @@ defmodule Exsm.Transitions do
 
   alias Exsm.Transition
 
-  @not_declated_error "Transition to this state isn't declared."
   @invalid_transitions_error "Invalid transitions defined"
 
   @doc false
@@ -44,7 +43,7 @@ defmodule Exsm.Transitions do
             {:error, reason}
         end
       else
-        {:error, @not_declated_error}
+        {:error, "Transition from: #{prev_state}, to: #{next_state} isn't declared."}
       end
 
     response
